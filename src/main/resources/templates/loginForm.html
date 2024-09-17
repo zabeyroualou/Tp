@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="fr">
+
+<head >
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Connexion</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon
+		     ============================================ -->
+    <link rel="shortcut icon" type="image/x-icon"th:href="@{img/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/notika-custom-icon.css}">
+    <link rel="stylesheet" th:href="@{/css/wave/waves.min.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <script th:src="@{/js/vendor/modernizr-2.8.3.min.js}"></script>
+</head>
+<body>
+<div class="login-content">
+    <div class="">
+        <img style="width: 80px; margin-right: 300px" th:src="@{images/logo.png}"/>
+        <img class="center" id="profile-img" style="width:100px; text-align: center;" alt="Avatar"
+             th:src="@{images/armoir.jpeg}" />
+    </div>
+    <p>
+    <h3 style="color: white;">
+        <div class="big-title">Comptabilités de l'Etat et Gestion Intégrée du Budget</div>
+        <small style="color: white; font-weight: bold;"><i>(Comptabilité des Matières)</i></small>
+    </h3>
+    </p>
+    <!-- Login -->
+    <div class="nk-block toggled" id="l-login">
+        <div class="nk-form">
+            <form name="f" th:action="@{/login}" method="post">
+                <div th:replace="fragments/message"></div>
+                <div th:if="${param.error}" class="alert alert-danger">
+                    Email ou mot de passe incorrect.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success">
+                    Vous êtes déconnecté
+                </div>
+                <div th:if="${param.expired}" class="alert alert-danger">
+                    Votre session a expiré. Veuillez vous reconnecter.
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
+                    <div class="nk-int-st">
+                        <input type="text" name="username"  class="form-control" placeholder="Username" required>
+                    </div>
+                </div>
+                <div class="input-group mg-t-15">
+                    <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
+                    <div class="nk-int-st">
+                        <input type="password" class="form-control" name="password"  placeholder="Password" required>
+                    </div>
+                </div>
+                <div class="mg-t-15">
+                    <button  style="width: 200px;" class="btn btn-success">Se connecter <i class="notika-icon notika-right-arrow right-arrow-ant"></i></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <!-- Start Footer area-->
+    <div class="footer navbar-fixed-bottom footer-copyright-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="footer-copy-right">
+                        <p>Copyright © 2023 - Advinteck.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Footer area-->
+</div>
+<script th:src="@{/js/vendor/jquery-1.12.4.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+</body>
+</html>

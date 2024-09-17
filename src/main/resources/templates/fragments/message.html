@@ -1,0 +1,8 @@
+<div class=" mt-2 mb-2 alert alert-success alert-dismissible fade show"  role="alert" th:if="${successMessage}" >
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    [[${successMessage}]]
+</div>
+<div class=" mt-2 mb-2 alert alert-success alert-dismissible fade show"  role="alert" th:if="${errorMessage}" >
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    [[${errorMessage}]]
+</div>

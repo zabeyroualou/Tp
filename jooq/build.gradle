@@ -1,0 +1,182 @@
+plugins {
+    id 'nu.studer.jooq' version '8.2'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+	  id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group 'com.cegib.compta.matieres'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    jooqGenerator 'org.postgresql:postgresql:42.5.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jooq {  //comments by khalid, customized for cegib-cpt --
+    version = dependencyManagement.importedProperties['jooq.version'] //https://www.jooq.org/xsd/jooq-codegen-3.9.2.xsd
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = 'jdbc:postgresql://localhost:5432/app_boutique_tprp'
+                    user = 'postgres'
+                    password = 'postgres'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    strategy {
+                        name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                        // ...
+                    }
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        //overridePrimaryKeys = 'MY_UNIQUE_KEY_NAME'
+                        includePrimaryKeys = true
+                        includeSystemSequences = true
+                        schemata {
+                            schema {
+                                inputSchema = 'public'
+                            }
+                        }
+                    }
+                    generate {
+                        relations = true
+                        deprecated = false
+                        generatedAnnotation = false //jooq version generation
+                        routines = true
+                        sequences = true
+                        udts = true
+                        queues = false
+                        links = false
+                        tables = true
+                        records = true
+                        fluentSetters = true
+                        // Generate TableRecord classes. Disable this when you don't need the additional type-safety
+                        pojos = true
+                        // (see immutablePojos bellow) Generate POJOs for usage of the ResultQuery.fetchInto(Class) API
+                        pojosEqualsAndHashCode = true    // Generate basic equals() and hashCode() methods in POJOs
+                        //pojosToString = true 			// Generate basic toString() methods in POJOs
+                        // Generate immutable POJOs for usage of the ResultQuery.fetchInto(Class) API
+                        // This overrides any value set in <pojos/>.
+                        // This forces <immutableInterfaces/> to be true, if <interfaces/> is set.
+                        immutablePojos = false
+                        // Generate interfaces that will be implemented by records and/or pojos.
+                        // You can also use these interfaces in Record.into(Class<?>) and similar
+                        // methods, to let jOOQ return proxy objects for them.
+                        // This forces <immutableInterfaces/> to be true, if <immutablePojos/> is set.
+                        interfaces = false
+                        // Generate immutable interfaces.
+                        // Setting this to true will force <interfaces/> to be set to true.
+                        // This cannot be set to false when <immutablePojos/> is set to true.
+                        immutableInterfaces = false
+
+                        //Generate DAOs in addition to POJO classes
+                        daos = true
+
+                        // Annotate POJOs and Records with JPA annotations for increased
+                        // compatibility and better integration with JPA/Hibernate, etc
+                        jpaAnnotations = false
+                        //Annotate POJOs and Records with JSR-303 validation annotations
+                        validationAnnotations = false
+                        //Annotate DAOs with useful spring annotations such as @Repository or @Autowired
+                        springAnnotations = true
+
+                        //Allow to turn off the generation of ALL global object references, which include
+                        //- Tables.java
+                        //- Sequences.java
+                        //- UDTs.java
+                        //- Routines.java
+                        //Turning off the generation of the above files may be necessary for very
+                        //large schemas, which exceed the amount of allowed constants in a class's
+                        //constant pool (64k) or, whose static initialiser would exceed 64k of
+                        //byte code.
+                        //Setting this flag to false will force all other global reference flags to be false:
+                        //- <globalTableReferences/>
+                        //- <globalSequenceReferences/>
+                        //- <globalUDTReferences/>
+                        //- <globalRoutineReferences/>
+
+                        globalObjectReferences = true
+                        //Allow to turn off the generation of global catalog references in Catalogs.java
+                        globalCatalogReferences = true
+                        //Allow to turn off the generation of global schema references in Schemas.java and each catalog
+                        globalSchemaReferences = true
+                        //Allow to turn off the generation of global table references in Tables.java and each schema
+                        globalTableReferences = true
+                        //Allow to turn off the generation of global table references in Sequences.java
+                        globalSequenceReferences = true
+                        //Allow to turn off the generation of global table references in UDTs.java
+                        globalUDTReferences = true
+                        //Allow to turn off the generation of global table references in Routines.java
+                        globalRoutineReferences = true
+                        //Allow to turn off the generation of global queue references in Queues.java
+                        globalQueueReferences = true
+                        //Allow to turn off the generation of global link references in Links.java
+                        globalLinkReferences = true
+
+                        //Generate fluent setters in
+                        //- records
+                        //- pojos
+                        //- interfaces
+                        //Fluent setters are against the JavaBeans specification, but can be quite
+                        //useful to those users who do not depend on EL, JSP, JSF, etc.
+                        fluentSetters = true
+
+                        //Generate varargs setters for array types for convenience
+                        //This may lead to compilation warnings in current Java versions.
+                        varargSetters = true
+
+                        //A regular expression matching all the types in generated code that should
+                        //be fully qualified.
+                        //This can be useful if you have a database object that generates a String
+                        //class, and you want to avoid naming clashes with the java.lang package
+                        //by specifying <fullyQualifiedTypes>java\.lang\..*</fullyQualifiedTypes>
+                        fullyQualifiedTypes = ""
+
+                        //Whether empty catalogs (e.g. empty because of <excludes/> configurations) should still
+                        //be generated.
+                        emptyCatalogs = false
+                        //Whether empty schemas (e.g. empty because of <excludes/> configurations) should still
+                        //be generated.
+                        emptySchemas = false
+
+                        //A flag indicating whether Java 8's java.time types should be used by the
+                        //source code generator, rather than JDBC's java.sql types.
+                        //This flag is ignored in the commercial Java 6 distribution of jOOQ 3.9+
+                        javaTimeTypes = true
+
+                    }
+                    target {
+                        //The destination package of your generated classes (within the
+                        //destination directory)
+                        //jOOQ may append the schema name to this package if generating multiple schemas,
+                        //e.g. org.jooq.generated.schema1
+                        //org.jooq.generated.schema2
+                        packageName = 'models.cegib.compta.matieres'
+
+                        //The destination directory of your generated classes
+                        //ATTENTION ce répertoire est effacé à chaque clean
+                        directory = 'src/generated/models'
+                        //directory = 'app'
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named('generateJooq').configure {
+    allInputsDeclared = true
+}
